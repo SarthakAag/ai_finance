@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: ankane/pgvector:latest
+    container_name: ledgerguard_db
+    restart: always
+    environment:
+      POSTGRES_USER: ledgerguard
+      POSTGRES_PASSWORD: ledgerguard
+      POSTGRES_DB: ledgerguard
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ledgerguard_ollama
+    restart: always
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    # After first `docker compose up`, run once:
+    #   docker exec -it ledgerguard_ollama ollama pull qwen2.5:7b-instruct
+    #   docker exec -it ledgerguard_ollama ollama pull nomic-embed-text
+
+volumes:
+  pgdata:
+  ollama_data:
